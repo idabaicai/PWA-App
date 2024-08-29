@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="manifest" href="manifest.json" />
+    <!-- <script src="./worker.js"></script> -->
+    <link rel="stylesheet" href="./styles/index.css">
+  </head>
+  <body>
+    <div id="status"></div>
+    <script>
+      window.addEventListener("load", () => {
+        console.log("load");
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker
+            .register("worker.js", { scope: "./" })
+            .then(function (registration) {
+              console.log("registration :>> ", registration);
+              document.querySelector("#status").textContent = "support pwa";
+            })
+            .catch(function (error) {
+              document.querySelector("#status").textContent = error;
+            });
+        } else {
+          // The current browser doesn't support service workers.
+          let aElement = document.createElement("a");
+          aElement.href = `
+       http://www.chromium.org/blink/serviceworker/service-worker-faq
+    `;
+          aElement.textContent = "unavailable";
+          document.querySelector("#status").appendChild(aElement);
+        }
+      });
+    </script>
+    <!-- <script>
+      window.addEventListener("load", () => {
+        const initData = () => {
+          fetch("https://jsonplaceholder.org/posts")
+            .then((res) => res.json())
+            .then((data) => {
+              console.log("data :>> ", data);
+            });
+        };
+        // initData();
+      });
+    </script> -->
+  </body>
+</html>
